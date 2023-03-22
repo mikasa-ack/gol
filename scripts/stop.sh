@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 cache_dir=.cache
 contract_address_file=$cache_dir/contract_address
