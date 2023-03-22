@@ -9,6 +9,7 @@ mod gol {
         grid: Vec<Vec<bool>>,
         height: u64,
         width: u64,
+        stop_at: u128,
     }
     impl Gol {
         /// Initializes the constructor with an initial grid.
@@ -18,6 +19,7 @@ mod gol {
                 height: init_grid.len() as u64,
                 width: init_grid[0].len() as u64,
                 grid: init_grid,
+                stop_at: 0,
             }
         }
 
@@ -82,11 +84,25 @@ mod gol {
         pub fn get(&self) -> Vec<Vec<bool>> {
             self.grid.clone()
         }
+        /// Simply returns the current value of our `bool`.
+        #[ink(message)]
+        pub fn set_stop_at(&mut self, value: u128) {
+            self.stop_at = value;
+        }
+
+        fn get_alive_cells_count(&self) -> u128 {
+            let mut count = 0;
+            self.grid.iter().for_each(|line| {
+                line.iter()
+                    .for_each(|cell| count += if *cell { 1 } else { 0 })
+            });
+            count
+        }
 
         /// Returns `true` if the autonomous call should be executed.
         #[ink(message)]
         pub fn should_execute(&self) -> bool {
-            true
+            self.get_alive_cells_count() == self.stop_at
         }
 
         /// Returns `true` if the autonomous call should be killed.
