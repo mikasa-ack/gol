@@ -10,6 +10,8 @@ mod gol {
         height: u64,
         width: u64,
         stop_at: u128,
+        manual_stop: bool,
+        manual_kill: bool,
     }
     impl Gol {
         /// Initializes the constructor with an initial grid.
@@ -20,6 +22,8 @@ mod gol {
                 width: init_grid[0].len() as u64,
                 grid: init_grid,
                 stop_at: 0,
+                manual_stop: false,
+                manual_kill: false,
             }
         }
 
@@ -102,13 +106,37 @@ mod gol {
         /// Returns `true` if the autonomous call should be executed.
         #[ink(message)]
         pub fn should_execute(&self) -> bool {
-            self.get_alive_cells_count() == self.stop_at
+            /*if self.manual_stop {
+                return false;
+            }
+            self.get_alive_cells_count() == self.stop_at*/
+            !self.manual_stop
         }
 
         /// Returns `true` if the autonomous call should be killed.
         #[ink(message)]
         pub fn should_kill(&self) -> bool {
-            false
+            self.manual_kill
+        }
+
+        #[ink(message)]
+        pub fn set_manual_stop(&mut self, value: bool) {
+            self.manual_stop = value;
+        }
+
+        #[ink(message)]
+        pub fn set_manual_kill(&mut self, value: bool) {
+            self.manual_kill = value;
+        }
+
+        #[ink(message)]
+        pub fn get_manual_stop(&self) -> bool {
+            self.manual_stop
+        }
+
+        #[ink(message)]
+        pub fn get_manual_kill(&self) -> bool {
+            self.manual_kill
         }
     }
 }
