@@ -1,10 +1,10 @@
 !/bin/bash
 grid_file=$1
 echo "Building contract..."
-#cargo contract build
+cargo contract build
 
 echo "Uploading contract..."
-#cargo contract upload --suri //Alice --execute
+cargo contract upload --suri //Alice --execute
 
 echo "Instantiating contract..."
 grid=$(cat $grid_file)
