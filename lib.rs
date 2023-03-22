@@ -71,5 +71,15 @@ mod gol {
         pub fn get(&self) -> Vec<Vec<bool>> {
             self.grid.clone()
         }
+
+        #[ink(message)]
+        pub fn should_execute(&self) -> bool {
+            true
+        }
+
+        #[ink(message)]
+        pub fn should_kill(&self) -> bool {
+            false
+        }
     }
 }
