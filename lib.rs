@@ -11,6 +11,7 @@ mod gol {
         width: u64,
     }
     impl Gol {
+        /// Initializes the constructor with an initial grid.
         #[ink(constructor)]
         pub fn new(init_grid: Vec<Vec<bool>>) -> Self {
             Self {
@@ -20,6 +21,10 @@ mod gol {
             }
         }
 
+        /// This function is called by the autonomous smart contract feature to update the state of the
+        /// contract.
+        /// # Note
+        /// This function is only called if `should_execute` returns `true`.
         #[ink(message)]
         pub fn tick(&mut self) {
             let mut next_grid = self.grid.clone();
@@ -50,6 +55,12 @@ mod gol {
             self.grid = next_grid;
         }
 
+        /// Returns the number of live neighbours around a given cell.
+        /// # Arguments
+        /// * `row` - The row of the cell to check.
+        /// * `col` - The column of the cell to check.
+        /// # Returns
+        /// The number of live neighbours around the given cell.
         pub fn get_alive_neighbours(&self, row: u64, col: u64) -> u8 {
             let mut count = 0;
             for delta_row in [self.height - 1, 0, 1].iter().cloned() {
@@ -72,11 +83,13 @@ mod gol {
             self.grid.clone()
         }
 
+        /// Returns `true` if the autonomous call should be executed.
         #[ink(message)]
         pub fn should_execute(&self) -> bool {
             true
         }
 
+        /// Returns `true` if the autonomous call should be killed.
         #[ink(message)]
         pub fn should_kill(&self) -> bool {
             false
